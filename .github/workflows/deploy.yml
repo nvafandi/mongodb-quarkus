@@ -25,7 +25,7 @@ jobs:
       - name: Deploy to VPS
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} -p ${{ secrets.SSH_PORT }} "
-            cd /home/deploy-user/my-project/mongodb-quarkus &&
+            cd /home/nurvan/mongodb-quarkus &&
             git pull origin main &&
             docker-compose down &&
             docker-compose up -d
