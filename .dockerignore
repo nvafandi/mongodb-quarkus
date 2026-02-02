@@ -6,6 +6,4 @@
 !src/**
 
 # Keep Quarkus build output
-!target/*-runner.jar
-!target/quarkus-app/**
-!target/lib/**
+!target/**

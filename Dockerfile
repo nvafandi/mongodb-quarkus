@@ -21,8 +21,9 @@ RUN mvn package -DskipTests
 FROM eclipse-temurin:21-jdk-alpine
 WORKDIR /app
 
-# Copy runner jar from build stage
-COPY --from=build /app/target/*-runner.jar app.jar
+# Copy Quarkus build output
+COPY --from=build /app/target/quarkus-app/ ./quarkus-app/
+COPY --from=build /app/target/lib/ ./lib/
 
 EXPOSE 8080
-CMD ["java", "-jar", "app.jar"]
+CMD ["java", "-jar", "quarkus-app/quarkus-run.jar"]
