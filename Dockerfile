@@ -15,9 +15,11 @@ COPY pom.xml .
 COPY src ./src
 
 # Build Quarkus runner jar + validate
-RUN mvn package -DskipTests \
-    && ls -l target \
-    && test -f target/*-runner.jar
+RUN mvn package -DskipTests
+
+# LOG folder target
+RUN ls -l target \
+    && ls -l target/quarkus-app
 
 # Stage 2: Run Quarkus app
 FROM eclipse-temurin:21-jdk-alpine
