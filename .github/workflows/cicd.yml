@@ -8,18 +8,30 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
+      SSH_HOST: ${{ secrets.SSH_HOST }}
+      SSH_PORT: ${{ secrets.SSH_PORT }}
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Set up SSH key
-        env:
-          SSH_HOST: ${{ secrets.SSH_HOST }}
-          SSH_PORT: ${{ secrets.SSH_PORT }}
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
-          HOST: ${{ variables.HOST }}
-
         run: |
-          echo "new host: $HOST | key: $SSH_PRIVATE_KEY | username: $SSH_USERNAME | host: $SSH_HOST | port: $SSH_PORT | "
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/github_actions_vps_key
+          chmod 600 ~/.ssh/github_actions_vps_key
+          ssh-keyscan -H $SSH_HOST >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+
+      - name: Deploy to VPS
+        run: |
+          ssh -i ~/.ssh/github_actions_vps_key $SSH_USERNAME@$SSH_HOST -p $SSH_PORT "
+            cd /home/nurvan/mongodb-quarkus &&
+            git pull origin main &&
+            docker-compose down &&
+            docker-compose up -d
+          "
