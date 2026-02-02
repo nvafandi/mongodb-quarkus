@@ -1,31 +1,28 @@
-# Use a base image with Java 21
-FROM eclipse-temurin:21-jdk-alpine
-
-# Set environment variables
-ENV MAVEN_VERSION=3.9.12
-ENV MAVEN_HOME=/opt/maven
-
-# Install Maven
-RUN apk add --no-cache curl && \
-    curl -fsSL https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz | tar xzf - -C /opt && \
-    ln -s /opt/apache-maven-${MAVEN_VERSION} ${MAVEN_HOME} && \
-    rm -rf /opt/apache-maven-${MAVEN_VERSION}/src
-
-# Set Maven environment variables
-ENV PATH="${MAVEN_HOME}/bin:${PATH}"
-
-# Set the working directory
+# Stage 1: Build Quarkus app
+FROM eclipse-temurin:21-jdk-alpine AS build
 WORKDIR /app
 
-# Copy the project files
+# Install Maven
+ENV MAVEN_VERSION=3.9.12
+RUN apk add --no-cache curl tar bash \
+    && curl -fsSL https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz \
+       | tar xzf - -C /opt \
+    && ln -s /opt/apache-maven-${MAVEN_VERSION} /opt/maven
+ENV PATH="/opt/maven/bin:${PATH}"
+
+# Copy project files
 COPY pom.xml .
 COPY src ./src
 
-# Build the project
-RUN mvn clean package -DskipTests
+# Build Quarkus runner jar
+RUN mvn package -DskipTests
 
-# Expose the port
+# Stage 2: Run Quarkus app
+FROM eclipse-temurin:21-jdk-alpine
+WORKDIR /app
+
+# Copy runner jar from build stage
+COPY --from=build /app/target/*-runner.jar app.jar
+
 EXPOSE 8080
-
-# Run the application
-CMD ["java", "-jar", "target/mongodb-quarkus-1.0.0-runner.jar"]
+CMD ["java", "-jar", "app.jar"]
