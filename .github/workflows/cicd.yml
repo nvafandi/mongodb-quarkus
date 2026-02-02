@@ -19,7 +19,7 @@ jobs:
           SSH_PORT: ${{ secrets.SSH_PORT }}
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
-          HOST: ${{ variables.SSH_HOST }}
+          HOST: ${{ variables.HOST }}
 
         run: |
           echo "new host: $HOST | key: $SSH_PRIVATE_KEY | username: $SSH_USERNAME | host: $SSH_HOST | port: $SSH_PORT | "
