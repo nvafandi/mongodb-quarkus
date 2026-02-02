@@ -29,17 +29,16 @@ services:
       - mongodb
 
   quarkus-app:
-    image: nurvanafandi/mongodb-quarkus:latest # <-- Pastikan ini sesuai dengan nama image dan tag Docker Hub kamu
-    container_name: mongodb-quarkus-app # Nama container agar mudah diidentifikasi
+    image: nurvanafandi/mongodb-quarkus:latest
+    container_name: mongodb-quarkus-app
+    restart: unless-stopped
     ports:
-      - "8080:8080" # Map port 8080 dari host ke port 8080 di dalam container
+      - "8080:8080"
     environment:
-      # Variabel lingkungan yang diperlukan oleh aplikasi Quarkus kamu
-      # Contoh: koneksi ke database MongoDB atau konfigurasi lainnya
-      - MONGODB_HOST=mongodb-server # Jika MongoDB kamu berjalan di service lain dalam docker-compose
-      - QUARKUS_HTTP_PORT=8080 # Konfirmasi port HTTP Quarkus
+      MONGODB_HOST: mongodb   # ✅ match service name
+      QUARKUS_HTTP_PORT: 8080
     depends_on:
-      - mongodb-server # Jika aplikasi kamu bergantung pada service MongoDB
+      - mongodb               # ✅ match service name
 
 volumes:
   mongodb-volume:
