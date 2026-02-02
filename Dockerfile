@@ -14,21 +14,20 @@ ENV PATH="/opt/maven/bin:${PATH}"
 COPY pom.xml .
 COPY src ./src
 
-# Build Quarkus runner jar
-RUN mvn package -DskipTests
-
-# Validate if the build was successful
-RUN if [ ! -f target/*-runner.jar ]; then \
-        echo "Build failed: quarkus-run.jar not found!"; \
-        exit 1; \
-    fi
+# Build Quarkus runner jar + validate
+RUN mvn package -DskipTests \
+    && ls -l target \
+    && test -f target/*-runner.jar
 
 # Stage 2: Run Quarkus app
 FROM eclipse-temurin:21-jdk-alpine
 WORKDIR /app
 
-# Copy runner jar from build stage
-COPY --from=build /app/target/*-runner.jar app.jar
+# Copy runner jar dari stage build, rename jadi quarkus-run.jar
+COPY --from=build /app/target/*-runner.jar quarkus-run.jar
+
+# Validate jar exists di image final
+RUN test -f quarkus-run.jar
 
 EXPOSE 5000
-CMD ["java", "-jar", "app.jar"]
+CMD ["java", "-jar", "quarkus-run.jar"]
