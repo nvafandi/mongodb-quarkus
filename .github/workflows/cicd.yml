@@ -15,23 +15,10 @@ jobs:
 
       - name: Set up SSH key
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          SSH_HOST: ${{ secrets.SSH_HOST }}
-        run: |
-          mkdir -p ~/.ssh && chmod 700 ~/.ssh
-          echo "$SSH_PRIVATE_KEY $SSH_PRIVATE_KEY" > ~/.ssh/github_actions_vps_key
-          chmod 600 ~/.ssh/github_actions_vps_key
-          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
-
-      - name: Deploy to VPS
-        env:
-          SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
           SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
+
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} -p ${{ secrets.SSH_PORT }} "
-            cd /home/nurvan/mongodb-quarkus &&
-            git pull origin main &&
-            docker-compose down &&
-            docker-compose up -d
-          "
+          echo " key: $SSH_PRIVATE_KEY | username: $SSH_USERNAME | host: $SSH_HOST | port: $SSH_PORT | "
