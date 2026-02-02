@@ -22,11 +22,11 @@ RUN mvn package -DskipTests \
 FROM eclipse-temurin:21-jdk-alpine
 WORKDIR /app
 
-# Copy quarkus-run.jar dari stage build
-COPY --from=build /app/target/quarkus-run.jar quarkus-run.jar
+# Copy seluruh quarkus-app folder dari build stage
+COPY --from=build /app/target/quarkus-app/ ./quarkus-app/
 
 # Validate jar exists di image final
-RUN test -f quarkus-run.jar
+RUN test -f quarkus-app/quarkus-run.jar
 
 EXPOSE 5000
-CMD ["java", "-jar", "quarkus-run.jar"]
+CMD ["java", "-jar", "quarkus-app/quarkus-run.jar"]
