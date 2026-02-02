@@ -1,7 +1,11 @@
+# Ignore everything by default
 *
+
+# Keep Maven build files
 !pom.xml
 !src/**
-!target/*-runner
+
+# Keep Quarkus build output
 !target/*-runner.jar
-!target/lib/*
-!target/quarkus-app/*
+!target/quarkus-app/**
+!target/lib/**
