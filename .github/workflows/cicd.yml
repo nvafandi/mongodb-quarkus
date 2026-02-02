@@ -54,5 +54,6 @@ jobs:
             cd /home/nurvan/mongodb-quarkus &&
             git pull origin main &&
             docker-compose down --remove-orphans &&
+            docker-compose pull &&
             docker-compose up -d --force-recreate
           "
