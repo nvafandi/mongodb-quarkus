@@ -17,6 +17,12 @@ COPY src ./src
 # Build Quarkus runner jar
 RUN mvn package -DskipTests
 
+# Validate if the build was successful
+RUN if [ ! -f target/*-runner.jar ]; then \
+        echo "Build failed: quarkus-run.jar not found!"; \
+        exit 1; \
+    fi
+
 # Stage 2: Run Quarkus app
 FROM eclipse-temurin:21-jdk-alpine
 WORKDIR /app
