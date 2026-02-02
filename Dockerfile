@@ -15,10 +15,7 @@ COPY pom.xml .
 COPY src ./src
 
 # Build Quarkus runner jar + validate
-RUN mvn package -DskipTests
-
-# LOG folder target
-RUN ls -l target \
+RUN mvn package -DskipTests \
     && ls -l target/quarkus-app
 
 # Stage 2: Run Quarkus app
@@ -27,9 +24,6 @@ WORKDIR /app
 
 # Copy runner jar dari stage build, rename jadi quarkus-run.jar
 COPY --from=build /app/target/*-runner.jar quarkus-run.jar
-
-# Validate jar exists di image final
-RUN test -f quarkus-run.jar
 
 EXPOSE 5000
 CMD ["java", "-jar", "quarkus-run.jar"]
