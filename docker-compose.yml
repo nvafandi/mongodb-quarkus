@@ -33,12 +33,12 @@ services:
     container_name: mongodb-quarkus-app
     restart: unless-stopped
     ports:
-      - "8080:8080"
+      - "5000:5000"
     environment:
-      MONGODB_HOST: mongodb   # ✅ match service name
-      QUARKUS_HTTP_PORT: 8080
+      MONGODB_HOST: mongodb
+      QUARKUS_HTTP_PORT: 5000
     depends_on:
-      - mongodb               # ✅ match service name
+      - mongodb
 
 volumes:
   mongodb-volume:
