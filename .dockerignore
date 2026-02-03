@@ -4,6 +4,7 @@
 # Keep Maven build files
 !pom.xml
 !src/**
-
-# Keep Quarkus build output
 !target/**
+
+# Keep entrypoint script
+!entrypoint.sh
