@@ -3,7 +3,7 @@ name: CI/CD to VPS
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   build-and-push:
