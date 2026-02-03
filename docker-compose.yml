@@ -30,7 +30,7 @@ services:
 
   quarkus-app:
     image: nurvanafandi/mongodb-quarkus:latest
-    container_name: mongodb-quarkus-app
+    container_name: mongodb-quarkus
     restart: unless-stopped
     ports:
       - "5000:5000"
