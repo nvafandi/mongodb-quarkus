@@ -52,6 +52,7 @@ jobs:
         run: |
           ssh -i ~/.ssh/vps_key $SSH_USERNAME@$SSH_HOST -p $SSH_PORT "
             cd /home/nurvan/project/mongodb-quarkus &&
+            git fetch &&
             git pull origin main &&
             docker-compose down &&
             docker-compose pull &&
