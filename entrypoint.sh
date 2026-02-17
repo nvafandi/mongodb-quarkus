@@ -1,5 +1,5 @@
 #!/bin/sh
-# Baca secret dari /run/secrets lalu export ke environment variable
+# Read secrets froms /run/secrets then export to environment variable
 
 if [ -f /run/secrets/mongodb_uri ]; then
   export MONGODB_URI=$(cat /run/secrets/mongodb_uri)
@@ -9,5 +9,5 @@ if [ -f /run/secrets/mongodb_db ]; then
   export MONGODB_DB=$(cat /run/secrets/mongodb_db)
 fi
 
-# Jalankan aplikasi Quarkus
+# Running docker
 exec java -jar /app/quarkus-app/quarkus-run.jar
