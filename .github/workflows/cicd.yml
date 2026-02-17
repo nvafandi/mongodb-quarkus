@@ -43,14 +43,14 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/github_actions_vps_key
-          chmod 600 ~/.ssh/github_actions_vps_key
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/vps_key
+          chmod 600 ~/.ssh/vps_key
           ssh-keyscan -H $SSH_HOST >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
 
       - name: Deploy to VPS
         run: |
-          ssh -i ~/.ssh/github_actions_vps_key $SSH_USERNAME@$SSH_HOST -p $SSH_PORT "
+          ssh -i ~/.ssh/vps_key $SSH_USERNAME@$SSH_HOST -p $SSH_PORT "
             cd /home/nurvan/mongodb-quarkus &&
             git pull origin main &&
             docker-compose down &&
